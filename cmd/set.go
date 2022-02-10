@@ -34,10 +34,12 @@ func init() {
 	setCmd.Flags().StringP("cookie", "c", "", "Your slack cookie. Only cookie with key \"d\" is required. For example: d=HDGHJSGHJDSGJ723672GJHSGR;")
 	setCmd.Flags().StringP("channel-id", "i", "", "Your slack channel id.")
 	setCmd.Flags().StringP("cron-expr", "e", "0 8 * * *", "Cron schedule expression. Default: 0 8 * * * which runs everyday at 8:00AM.")
+	setCmd.Flags().StringP("message", "m", "", "Your slack message. Default: \"Hello, I'm here!\"")
 	viper.BindPFlag("token", setCmd.Flags().Lookup("token"))
 	viper.BindPFlag("cookie", setCmd.Flags().Lookup("cookie"))
 	viper.BindPFlag("channel-id", setCmd.Flags().Lookup("channel-id"))
 	viper.BindPFlag("cron-expr", setCmd.Flags().Lookup("cron-expr"))
+	viper.BindPFlag("message", setCmd.Flags().Lookup("message"))
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:

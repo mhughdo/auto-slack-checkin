@@ -29,9 +29,7 @@ func SendMessage() error {
 	token := viper.GetString("token")
 	channelID := viper.GetString("channel-id")
 	message := viper.GetString("message")
-	fmt.Println(token)
 
-	return nil
 	api := slack.New(token, slack.OptionHTTPClient(NewCustomHTTPClient()))
 
 	_, _, err := api.PostMessage(channelID, slack.MsgOptionText(message, false))

@@ -12,19 +12,21 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// runCronCmd represents the runCron command
-var runCronCmd = &cobra.Command{
-	Use:   "runCron",
+// cronCmd represents the runCron command
+var cronCmd = &cobra.Command{
+	Use:   "cron",
 	Short: "Run a cron job.",
 	Long:  `Run a cron job to send the message.`,
 	Run: func(cmd *cobra.Command, args []string) {
+
+
 		err := slack.SendMessage()
 		fmt.Println(err)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(runCronCmd)
+	rootCmd.AddCommand(cronCmd)
 
 	// Here you will define your flags and configuration settings.
 
