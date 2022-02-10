@@ -5,6 +5,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -13,8 +14,9 @@ import (
 
 type Config struct {
 	Token     string `mapstructure:"token"`
-	ChannelID string `mapstructure:"channel_id"`
+	ChannelID string `mapstructure:"channel-id"`
 	Cookie    string `mapstructure:"cookie"`
+	CronExpr  string `mapstructure:"cron-expr"`
 }
 
 // configCmd represents the config command
@@ -39,7 +41,13 @@ var configCmd = &cobra.Command{
 			return err
 		}
 
-		fmt.Println(config)
+		confJson, err := json.MarshalIndent(config, "", "  ")
+
+		if err != nil {
+			return err
+		}
+
+		fmt.Printf("%s\n", confJson)
 
 		return nil
 	},
