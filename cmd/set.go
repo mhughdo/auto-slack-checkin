@@ -5,7 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -26,14 +25,14 @@ var setCmd = &cobra.Command{
 			return err
 		}
 
-		confJson, err := json.MarshalIndent(config, "", "  ")
+		// confJson, err := json.MarshalIndent(config, "", "  ")
 
-		if err != nil {
-			return err
-		}
+		// if err != nil {
+		// 	return err
+		// }
 
-		fmt.Println("Configurations to be set (or be overriden if exists), zero-value will be ignored:")
-		fmt.Printf("%s\n", confJson)
+		// fmt.Println("Configurations to be set (or be overriden if exists), zero-value will be ignored:")
+		// fmt.Printf("%s\n", confJson)
 		if err := viper.WriteConfig(); err != nil {
 			return fmt.Errorf("error writing config file: %s", err)
 		}
