@@ -7,6 +7,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -40,7 +41,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.auto-slack-checkin.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.auto-slack-checkin.json)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -49,18 +50,43 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	home, err := os.UserHomeDir()
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
 		// Find home directory.
+		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 
 		// Search config in home directory with name ".auto-slack-checkin" (without extension).
+		configName := ".auto-slack-checkin"
+		configType := "json"
+		configPath := filepath.Join(home, configName+"."+configType)
 		viper.AddConfigPath(home)
-		viper.SetConfigType("json")
-		viper.SetConfigName(".auto-slack-checkin")
+		viper.SetConfigType(configType)
+		viper.SetConfigName(configName)
+
+		_, err = os.Stat(configPath)
+		if os.IsNotExist(err) {
+			if _, err := os.Create(configPath); err != nil { // perm 0666
+				fmt.Printf("Failed to create config file: %s\n", err)
+				os.Exit(1)
+			}
+			config := Config{
+				Token:     "",
+				ChannelID: "",
+				Cookie:    "",
+				CronExpr:  "0 8 * * *",
+				Message:   "",
+			}
+			err = viper.Unmarshal(&config)
+			if err != nil {
+				return
+			}
+
+			viper.WriteConfig()
+			fmt.Printf("Config file created: %s\n", configPath)
+		}
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
