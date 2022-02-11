@@ -18,7 +18,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "auto-slack-checkin",
 	Short: "Auto checkin to slack",
-	Long: `This is a CLI tool to automatically checkin to slack.`,
+	Long:  `This is a CLI tool to automatically checkin to slack.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -49,12 +49,12 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
+	home, err := os.UserHomeDir()
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
 		// Find home directory.
-		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 
 		// Search config in home directory with name ".auto-slack-checkin" (without extension).

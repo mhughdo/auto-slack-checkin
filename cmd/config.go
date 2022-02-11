@@ -17,6 +17,7 @@ type Config struct {
 	ChannelID string `mapstructure:"channel-id"`
 	Cookie    string `mapstructure:"cookie"`
 	CronExpr  string `mapstructure:"cron-expr"`
+	Message   string `mapstructure:"message"`
 }
 
 // configCmd represents the config command

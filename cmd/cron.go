@@ -6,10 +6,14 @@ package cmd
 
 import (
 	"fmt"
+	"time"
 
 	slack "auto-slack-checkin/internal/pkg/slack"
 
+	"github.com/go-co-op/gocron"
+	"github.com/lnquy/cron"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // cronCmd represents the runCron command
@@ -17,11 +21,33 @@ var cronCmd = &cobra.Command{
 	Use:   "cron",
 	Short: "Run a cron job.",
 	Long:  `Run a cron job to send the message.`,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
+		s := gocron.NewScheduler(time.Local)
+		cronExpr := viper.GetString("cron-expr")
+		if cronExpr == "" {
+			return fmt.Errorf("cron-expr is not set")
+		}
 
+		exprDesc, _ := cron.NewDescriptor(cron.Verbose(true))
+		desc, err := exprDesc.ToDescription(cronExpr, "")
 
-		err := slack.SendMessage()
-		fmt.Println(err)
+		if err != nil {
+			return fmt.Errorf("cron-expr is invalid: %s", err)
+		}
+
+		fmt.Printf("Cron expression description: %s\n", desc)
+
+		s.Cron(cronExpr).Do(func() error {
+			err := slack.SendMessage()
+			if err != nil {
+				fmt.Println(err)
+				return err
+			}
+
+			return nil
+		})
+		s.StartBlocking()
+		return nil
 	},
 }
 
