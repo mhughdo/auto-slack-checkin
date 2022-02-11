@@ -22,7 +22,7 @@ var cronCmd = &cobra.Command{
 	Short: "Run a cron job.",
 	Long:  `Run a cron job to send the message.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		s := gocron.NewScheduler(time.Local)
+		s := gocron.NewScheduler(time.FixedZone("Asia/Ho_Chi_Minh", 7*3600))
 		cronExpr := viper.GetString("cron-expr")
 
 		if viper.GetString("cron-expr") == "" {
