@@ -5,6 +5,9 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -15,15 +18,30 @@ var setCmd = &cobra.Command{
 	Short: "Set config.",
 	Long:  `Set configs. Available flags: token, cookie, channel-id.`,
 	Args:  cobra.OnlyValidArgs,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		config := Config{}
 
 		err := viper.Unmarshal(&config)
 		if err != nil {
-			return
+			return err
 		}
 
-		viper.WriteConfig()
+		confJson, err := json.MarshalIndent(config, "", "  ")
+
+		if err != nil {
+			return err
+		}
+
+		fmt.Println("Configurations to be set (or be overriden if exists), zero-value will be ignored:")
+		fmt.Printf("%s\n", confJson)
+		if err := viper.WriteConfig(); err != nil {
+			return fmt.Errorf("error writing config file: %s", err)
+		}
+
+		fmt.Print("Configurations set successfully.\n")
+
+		return nil
+
 	},
 }
 

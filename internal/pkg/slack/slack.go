@@ -34,18 +34,6 @@ func SendMessage() error {
 	channelID := viper.GetString("channel-id")
 	message := viper.GetString("message")
 
-	if token == "" {
-		return fmt.Errorf("token is required")
-	}
-
-	if channelID == "" {
-		return fmt.Errorf("channel-id is required")
-	}
-
-	if message == "" {
-		return fmt.Errorf("message is required")
-	}
-
 	api := slack.New(token, slack.OptionHTTPClient(NewCustomHTTPClient()))
 
 	_, _, err := api.PostMessage(channelID, slack.MsgOptionText(message, false))

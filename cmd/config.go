@@ -13,11 +13,11 @@ import (
 )
 
 type Config struct {
-	Token     string `mapstructure:"token"`
-	ChannelID string `mapstructure:"channel-id"`
-	Cookie    string `mapstructure:"cookie"`
-	CronExpr  string `mapstructure:"cron-expr"`
-	Message   string `mapstructure:"message"`
+	Token     string `mapstructure:"token" json:"token"`
+	ChannelID string `mapstructure:"channel-id" json:"channel-id"`
+	Cookie    string `mapstructure:"cookie" json:"cookie"`
+	CronExpr  string `mapstructure:"cron-expr" json:"cron-expr"`
+	Message   string `mapstructure:"message" json:"message"`
 }
 
 // configCmd represents the config command

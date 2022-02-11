@@ -24,8 +24,25 @@ var cronCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		s := gocron.NewScheduler(time.Local)
 		cronExpr := viper.GetString("cron-expr")
-		if cronExpr == "" {
+
+		if viper.GetString("cron-expr") == "" {
 			return fmt.Errorf("cron-expr is not set")
+		}
+
+		if viper.GetString("cron-expr") == "" {
+			return fmt.Errorf("token is not set")
+		}
+
+		if viper.GetString("channel-id") == "" {
+			return fmt.Errorf("channel-id is not set")
+		}
+
+		if viper.GetString("cookie") == "" {
+			return fmt.Errorf("cookie is not set")
+		}
+
+		if viper.GetString("message") == "" {
+			return fmt.Errorf("message is not set")
 		}
 
 		exprDesc, _ := cron.NewDescriptor(cron.Verbose(true))
